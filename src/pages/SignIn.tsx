@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Avatar from '../components/Avatar'
+import SkipLink from '../components/SkipLink'
 import Wordmark from '../components/Wordmark'
 import { startLabel } from '../lib/today'
 import { useApp } from '../state/context'
@@ -39,7 +40,8 @@ export default function SignIn() {
   }
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-3xl flex-col px-4 py-10 sm:py-16">
+    <main id="main" tabIndex={-1} className="mx-auto flex min-h-screen max-w-3xl flex-col px-4 py-10 outline-none sm:py-16">
+      <SkipLink />
       <div className="mb-10 text-center">
         <Wordmark className="text-lg" />
         <h1 className="mt-4 text-3xl font-semibold tracking-tight text-slate-900">Onboarding Hub</h1>
@@ -94,6 +96,6 @@ export default function SignIn() {
           {resetDone ? 'Demo data reset ✓' : 'Reset demo data'}
         </button>
       </div>
-    </div>
+    </main>
   )
 }

@@ -1,5 +1,8 @@
 import { useEffect, useRef, type ReactNode } from 'react'
 
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+
 interface Props {
   title: string
   onClose: () => void
@@ -7,7 +10,7 @@ interface Props {
   wide?: boolean
 }
 
-/** Accessible-enough dialog: Esc closes, backdrop click closes, focus moves in. */
+/** Dialog: Esc closes, backdrop click closes, focus moves in and is trapped until it closes. */
 export default function Modal({ title, onClose, children, wide }: Props) {
   const panel = useRef<HTMLDivElement>(null)
   const closeRef = useRef(onClose)
@@ -18,7 +21,26 @@ export default function Modal({ title, onClose, children, wide }: Props) {
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null
     panel.current?.focus()
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && closeRef.current()
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') return closeRef.current()
+      if (e.key !== 'Tab' || !panel.current) return
+      // Focus trap: keep Tab / Shift+Tab cycling inside the dialog.
+      const focusable = panel.current.querySelectorAll<HTMLElement>(FOCUSABLE)
+      if (focusable.length === 0) return e.preventDefault()
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      const active = document.activeElement
+      if (e.shiftKey && (active === first || active === panel.current)) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault()
+        first.focus()
+      } else if (!panel.current.contains(active)) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
     document.addEventListener('keydown', onKey)
     document.body.style.overflow = 'hidden'
     return () => {
