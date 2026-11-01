@@ -2,7 +2,7 @@
 
 A first-version prototype of a new-employee onboarding tool for BrightPath Technologies (~150 employees, several hires a month). It replaces the scattered welcome emails, shared docs and spreadsheets with one place where new hires see what to focus on and managers see who needs help.
 
-**Live demo:** _added after the first deploy_
+**Live demo:** https://brightpath-onboarding-hub.vercel.app
 
 ## Run it
 
