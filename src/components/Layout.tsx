@@ -1,6 +1,7 @@
 import { NavLink, Navigate, Outlet } from 'react-router-dom'
 import { useApp } from '../state/context'
 import Avatar from './Avatar'
+import SkipLink from './SkipLink'
 import ToastHost from './ToastHost'
 import Wordmark from './Wordmark'
 
@@ -22,6 +23,7 @@ export default function Layout({ kind }: { kind: 'hire' | 'manager' }) {
 
   return (
     <div className="min-h-screen">
+      <SkipLink />
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-4xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
           <Wordmark />
@@ -55,7 +57,7 @@ export default function Layout({ kind }: { kind: 'hire' | 'manager' }) {
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-4xl px-4 py-6 sm:py-8">
+      <main id="main" tabIndex={-1} className="mx-auto max-w-4xl px-4 py-6 outline-none sm:py-8">
         <Outlet />
       </main>
       <ToastHost />
