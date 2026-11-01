@@ -1,9 +1,10 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
 import AllTasks from './pages/AllTasks'
 import Focus from './pages/Focus'
 import HireDrillDown from './pages/HireDrillDown'
 import ManagerDashboard from './pages/ManagerDashboard'
+import NotFound from './pages/NotFound'
 import SignIn from './pages/SignIn'
 
 export default function App() {
@@ -19,7 +20,7 @@ export default function App() {
           <Route index element={<ManagerDashboard />} />
           <Route path="hires/:id" element={<HireDrillDown />} />
         </Route>
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )
