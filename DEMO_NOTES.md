@@ -7,7 +7,7 @@
    - Open "Get GitHub org access": description, why it matters, link, help contact. Mark it complete: the progress bar moves and the next urgent task slides up.
    - Open **All Tasks** to show the phases, the colour plus label on every row, and the filter chips.
 2. **Sign out and sign in as David Kim** (Engineering Manager).
-   - The notification card says Priya Shah joins on Sunday and her plan is ready. Click **Review & send welcome**, edit a line, send. The toast appears and the card disappears.
+   - The notification card says Priya Shah joins next week and their plan is ready. Click **Review & send welcome**, edit a line, send. The toast appears and the card disappears.
    - Marcus Lee is first in the list (three overdue tasks). Click **Remind** to show the reminder listing exactly those tasks.
    - Open Emily (or Marcus) to see the plan by phase and "Your tasks for ..." (open items owned by the manager or IT).
 3. **Sign in as Jordan Patel** (Sales) to prove plans differ by department: CRM setup, sales playbook, demo certification instead of GitHub and dev environment.
@@ -20,8 +20,8 @@ Tip: "Reset demo data" on the sign-in screen puts everything back.
 
 - **Plan before code.** The spec was turned into a written plan first: file layout, build order, the rules where bugs hide, and what to verify. Decisions that went beyond the spec were written down and flagged.
 - **Rules first, UI second.** Status colours, plan generation, the attention sort and the email text are small pure functions with unit tests (16), written before any screen used them. The UI is mostly wiring.
-- **Small, reviewable PRs.** Each feature is its own branch and PR (core logic, app shell, Focus, All Tasks, email modal, manager dashboard, stretch items, docs, add-new-hire) so the history reads like the build order.
-- **Verified in a real browser**, not just by building: Emily's Focus page, completing tasks, welcome send, Marcus's reminder, phone width, empty state, reload persistence and the empty-storage fallback.
+- **Small, reviewable PRs.** Each feature is its own branch and PR (core logic, app shell, Focus, All Tasks, email modal, manager dashboard, stretch items, add-new-hire, keyboard focus trap and skip link, 404 page, docs) so the history reads like the build order.
+- **Verified in a real browser**, not just by building: Emily's Focus page, completing tasks, welcome send, Marcus's reminder, add-new-hire, phone width, empty state, reload persistence, the empty-storage fallback, and real Tab / Shift+Tab / Esc key presses for the dialogs and skip link.
 - **Scope held to the brief.** Everything in the Cut list stayed cut; the three stretch items were added only after the core worked.
 
 ## What I built and why
@@ -39,6 +39,7 @@ Design calls worth mentioning:
 - **One status function.** Colour, the Focus list, dashboard counts and sort order all come from `getTaskStatus`, so they cannot disagree.
 - **Red is due-date based, not phase based.** Before Day 1 the pre-start tasks are red; after the start date Week 1 tasks turn red on their own.
 - **Never colour alone.** Every status has an icon and a text label.
+- **Keyboard friendly.** A skip-to-content link is the first tab stop, dialogs trap focus until closed, and unknown URLs get a friendly 404 page instead of a silent redirect.
 - **Calm tone.** Red is only used for things that are due within three days or late.
 - **Welcome and reminder emails share one component**, so the next channel (Slack, say) is one more template.
 
@@ -48,6 +49,7 @@ Small decisions I made where the brief was open:
 - "On track" on the dashboard counts hires with no overdue tasks.
 - The new-hire card says "Their onboarding plan is ready" (gender-neutral).
 - Saved demo data is thrown away when the day changes, so the relative dates stay right.
+- Only David appears as a manager on the sign-in screen. The other three managers exist so the data model is real, and a hire added under them is visible by signing in as that hire.
 
 ## What I deliberately cut, and why
 
@@ -64,4 +66,4 @@ Small decisions I made where the brief was open:
 3. An HR template editor so Sarah can change plans without a developer.
 4. Task ownership across IT, HR and managers, with hand-offs and a queue for each team.
 5. Analytics on onboarding completion time and the tasks that stall most often.
-6. Roles beyond department (for example per-role task variants) and a "add new hire" form that generates a plan on the spot.
+6. Per-role task variants within a department, plus editing and removing hires (today the Add new hire form only creates them).
