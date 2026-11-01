@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { buildSeedEmployees, MANAGERS, SEED_VERSION } from '../data/seed'
+import { generatePlan } from '../lib/plan'
 import { loadJSON, removeKey, saveJSON } from '../lib/storage'
 import { today as getToday } from '../lib/today'
 import type { Employee } from '../types'
-import { AppContext, type AppApi, type Session, type Toast } from './context'
+import { AppContext, type AppApi, type NewHireInput, type Session, type Toast } from './context'
 
 const STORAGE_KEY = 'brightpath-onboarding-hub'
 
@@ -52,6 +53,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
     [dismissToast],
   )
 
+  const addEmployee = useCallback((input: NewHireInput): Employee => {
+    const hire: Employee = {
+      id: `emp-${Date.now().toString(36)}`,
+      ...input,
+      welcomed: false,
+      tasks: generatePlan(input),
+    }
+    setEmployees((all) => [...all, hire])
+    return hire
+  }, [])
+
   const api = useMemo<AppApi>(
     () => ({
       today,
@@ -76,6 +88,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         ),
       markWelcomed: (employeeId) =>
         setEmployees((all) => all.map((e) => (e.id === employeeId ? { ...e, welcomed: true } : e))),
+      addEmployee,
       notify,
       dismissToast,
       resetDemo: () => {
@@ -84,7 +97,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         setSession(null)
       },
     }),
-    [today, employees, session, toasts, notify, dismissToast],
+    [today, employees, session, toasts, addEmployee, notify, dismissToast],
   )
 
   return <AppContext.Provider value={api}>{children}</AppContext.Provider>

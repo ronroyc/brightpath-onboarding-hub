@@ -1,9 +1,17 @@
 import { createContext, useContext } from 'react'
-import type { Employee, Manager } from '../types'
+import type { Department, Employee, Manager } from '../types'
 
 export interface Toast {
   id: number
   message: string
+}
+
+export interface NewHireInput {
+  name: string
+  role: string
+  department: Department
+  startDate: string
+  managerId: string
 }
 
 export type Session = { kind: 'hire' | 'manager'; id: string } | null
@@ -19,6 +27,7 @@ export interface AppApi {
   signOut: () => void
   toggleTask: (employeeId: string, taskId: string) => void
   markWelcomed: (employeeId: string) => void
+  addEmployee: (input: NewHireInput) => Employee
   notify: (message: string) => void
   dismissToast: (id: number) => void
   resetDemo: () => void

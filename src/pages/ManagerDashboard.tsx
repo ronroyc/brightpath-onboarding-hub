@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import AddHireModal from '../components/AddHireModal'
 import Avatar from '../components/Avatar'
 import EmailPreviewModal, { type EmailKind } from '../components/EmailPreviewModal'
 import ProgressBar from '../components/ProgressBar'
@@ -62,6 +63,7 @@ function HireRow({ s, today, onRemind }: { s: HireSummary; today: string; onRemi
 
 export default function ManagerDashboard() {
   const { session, managers, employees, today } = useApp()
+  const [adding, setAdding] = useState(false)
   const [email, setEmail] = useState<{ kind: EmailKind; employee: Employee } | null>(null)
   const me = managers.find((m) => m.id === session?.id)
   if (!me) return null
@@ -74,9 +76,17 @@ export default function ManagerDashboard() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
-        {me.department} · {hires.length} new {hires.length === 1 ? 'hire' : 'hires'}
-      </h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
+          {me.department} · {hires.length} new {hires.length === 1 ? 'hire' : 'hires'}
+        </h1>
+        <button
+          onClick={() => setAdding(true)}
+          className="rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+        >
+          + Add new hire
+        </button>
+      </div>
 
       {toWelcome.map((e) => (
         <div
@@ -121,6 +131,7 @@ export default function ManagerDashboard() {
         </ul>
       )}
 
+      {adding && <AddHireModal onClose={() => setAdding(false)} />}
       {email && <EmailPreviewModal kind={email.kind} employee={email.employee} onClose={() => setEmail(null)} />}
     </div>
   )
