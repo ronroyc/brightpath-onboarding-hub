@@ -11,9 +11,18 @@
    - Marcus Lee is first in the list (three overdue tasks). Click **Remind** to show the reminder listing exactly those tasks.
    - Open Emily (or Marcus) to see the plan by phase and "Your tasks for ..." (open items owned by the manager or IT).
 3. **Sign in as Jordan Patel** (Sales) to prove plans differ by department: CRM setup, sales playbook, demo certification instead of GitHub and dev environment.
-4. **Mention the auto-plan.** `generatePlan` in `src/lib/plan.ts` is the whole feature: company-wide templates plus the department's templates, with due dates computed from the start date.
+4. **Add a hire live** (manager dashboard, "+ Add new hire"): pick Marketing and watch the preview change to 11 company-wide + 5 Marketing tasks, then submit. This is Sarah's auto-generate goal in one step.
+5. **Mention the auto-plan.** `generatePlan` in `src/lib/plan.ts` is the whole feature: company-wide templates plus the department's templates, with due dates computed from the start date.
 
 Tip: "Reset demo data" on the sign-in screen puts everything back.
+
+## How it was built
+
+- **Plan before code.** The spec was turned into a written plan first: file layout, build order, the rules where bugs hide, and what to verify. Decisions that went beyond the spec were written down and flagged.
+- **Rules first, UI second.** Status colours, plan generation, the attention sort and the email text are small pure functions with unit tests (16), written before any screen used them. The UI is mostly wiring.
+- **Small, reviewable PRs.** Each feature is its own branch and PR (core logic, app shell, Focus, All Tasks, email modal, manager dashboard, stretch items, docs, add-new-hire) so the history reads like the build order.
+- **Verified in a real browser**, not just by building: Emily's Focus page, completing tasks, welcome send, Marcus's reminder, phone width, empty state, reload persistence and the empty-storage fallback.
+- **Scope held to the brief.** Everything in the Cut list stayed cut; the three stretch items were added only after the core worked.
 
 ## What I built and why
 
