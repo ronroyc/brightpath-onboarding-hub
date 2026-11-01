@@ -10,11 +10,15 @@ interface Props {
 /** Accessible-enough dialog: Esc closes, backdrop click closes, focus moves in. */
 export default function Modal({ title, onClose, children, wide }: Props) {
   const panel = useRef<HTMLDivElement>(null)
+  const closeRef = useRef(onClose)
+  useEffect(() => {
+    closeRef.current = onClose
+  })
 
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null
     panel.current?.focus()
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && closeRef.current()
     document.addEventListener('keydown', onKey)
     document.body.style.overflow = 'hidden'
     return () => {
@@ -22,7 +26,7 @@ export default function Modal({ title, onClose, children, wide }: Props) {
       document.body.style.overflow = ''
       previous?.focus()
     }
-  }, [onClose])
+  }, [])
 
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center sm:items-center sm:p-6">
