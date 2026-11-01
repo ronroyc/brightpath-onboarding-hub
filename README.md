@@ -33,6 +33,11 @@ No backend and no environment variables. State lives in React context and is per
 - **Manager drill-down**: a hire's full plan by phase, plus the manager's and IT's open tasks
 - **Add new hire**: name, title, department, start date and manager; the plan size previews live and the plan is generated on submit
 - **Email preview**: one shared modal for the Welcome and Reminder emails (nothing is actually sent)
+- **Page not found**: unknown URLs show a friendly 404 with a button back to the user's own home
+
+### Accessibility
+
+Every status has an icon and a text label (never colour alone). A skip-to-content link is the first tab stop, dialogs trap keyboard focus until they close (Esc closes them), and the layout works at phone width.
 
 ### How status works
 
