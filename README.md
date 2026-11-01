@@ -31,6 +31,7 @@ No backend and no environment variables. State lives in React context and is per
 - **Task detail**: description, why it matters, link, help contact, due date, owner, mark complete / undo
 - **Manager dashboard**: new-hire notification card, summary stats, hires sorted by attention needed
 - **Manager drill-down**: a hire's full plan by phase, plus the manager's and IT's open tasks
+- **Add new hire**: name, title, department, start date and manager; the plan size previews live and the plan is generated on submit
 - **Email preview**: one shared modal for the Welcome and Reminder emails (nothing is actually sent)
 
 ### How status works
