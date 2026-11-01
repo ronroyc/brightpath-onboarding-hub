@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Avatar from '../components/Avatar'
 import Wordmark from '../components/Wordmark'
@@ -28,7 +29,8 @@ function PersonCard({ name, role, detail, onClick }: CardProps) {
 }
 
 export default function SignIn() {
-  const { employees, managers, today, signIn } = useApp()
+  const { employees, managers, today, signIn, resetDemo } = useApp()
+  const [resetDone, setResetDone] = useState(false)
   const navigate = useNavigate()
 
   const go = (kind: 'hire' | 'manager', id: string) => {
@@ -80,9 +82,18 @@ export default function SignIn() {
         </div>
       </section>
 
-      <p className="mt-auto text-center text-xs text-slate-500">
-        Prototype — production would use company SSO.
-      </p>
+      <div className="mt-auto space-y-2 text-center text-xs text-slate-500">
+        <p>Prototype — production would use company SSO.</p>
+        <button
+          onClick={() => {
+            resetDemo()
+            setResetDone(true)
+          }}
+          className="font-medium text-brand-600 hover:underline"
+        >
+          {resetDone ? 'Demo data reset ✓' : 'Reset demo data'}
+        </button>
+      </div>
     </div>
   )
 }
