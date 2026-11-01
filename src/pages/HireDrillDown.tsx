@@ -4,8 +4,11 @@ import Avatar from '../components/Avatar'
 import EmailPreviewModal, { type EmailKind } from '../components/EmailPreviewModal'
 import ProgressBar from '../components/ProgressBar'
 import TaskList from '../components/TaskList'
+import StatusBadge from '../components/StatusBadge'
+import { OWNER_LABEL } from '../lib/labels'
 import { summarizeHire } from '../lib/sort'
-import { formatDate, startLabel } from '../lib/today'
+import { getTaskStatus } from '../lib/status'
+import { dueLabel, formatDate, startLabel } from '../lib/today'
 import { useApp } from '../state/context'
 
 export default function HireDrillDown() {
@@ -18,6 +21,9 @@ export default function HireDrillDown() {
 
   const s = summarizeHire(hire, today)
   const needsNudge = s.overdue + s.dueSoon > 0
+  const ownedByYou = hire.tasks
+    .filter((t) => !t.completedAt && (t.owner === 'manager' || t.owner === 'it'))
+    .sort((a, b) => a.dueDate.localeCompare(b.dueDate))
 
   return (
     <div>
@@ -67,6 +73,28 @@ export default function HireDrillDown() {
           </p>
         </div>
       </div>
+
+      {ownedByYou.length > 0 && (
+        <section className="mt-8" aria-labelledby="your-tasks">
+          <h2 id="your-tasks" className="mb-1 text-lg font-semibold text-slate-900">
+            Your tasks for {hire.name.split(' ')[0]}
+          </h2>
+          <p className="mb-3 text-sm text-slate-600">Open items owned by you or IT that {hire.name.split(' ')[0]} is waiting on.</p>
+          <ul className="space-y-2">
+            {ownedByYou.map((t) => (
+              <li key={t.id} className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-medium text-slate-900">{t.title}</p>
+                  <p className="text-xs text-slate-500">
+                    {OWNER_LABEL[t.owner] === 'Your manager' ? 'You' : OWNER_LABEL[t.owner]} · {dueLabel(t.dueDate, today)}
+                  </p>
+                </div>
+                <StatusBadge status={getTaskStatus(t, today)} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <h2 className="mb-4 mt-8 text-lg font-semibold text-slate-900">Onboarding plan</h2>
       <TaskList employee={hire} today={today} canToggle={false} />
