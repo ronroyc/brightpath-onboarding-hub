@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { OWNER_LABEL, PHASE_LABEL } from '../lib/labels'
 import { getTaskStatus } from '../lib/status'
 import { dueLabel, formatDate } from '../lib/today'
@@ -15,6 +16,7 @@ interface Props {
 
 export default function TaskDetailModal({ employeeId, taskId, onClose, canToggle = true }: Props) {
   const { employees, today, toggleTask, notify } = useApp()
+  const [showLinkNote, setShowLinkNote] = useState(false)
   const task = employees.find((e) => e.id === employeeId)?.tasks.find((t) => t.id === taskId)
   if (!task) return null
 
@@ -40,7 +42,7 @@ export default function TaskDetailModal({ employeeId, taskId, onClose, canToggle
         <button
           onClick={onClose}
           aria-label="Close"
-          className="-mr-1 -mt-1 rounded-md p-1.5 text-slate-500 hover:bg-slate-100"
+          className="-mr-2 -mt-2 flex h-10 w-10 items-center justify-center rounded-md text-slate-500 hover:bg-slate-100"
         >
           ✕
         </button>
@@ -74,14 +76,22 @@ export default function TaskDetailModal({ employeeId, taskId, onClose, canToggle
         </section>
 
         {task.link && (
-          <a
-            href={task.link.url}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-1 font-medium text-brand-600 hover:underline"
-          >
-            {task.link.label} <span aria-hidden="true">↗</span>
-          </a>
+          <div>
+            <button
+              type="button"
+              onClick={() => setShowLinkNote((v) => !v)}
+              aria-expanded={showLinkNote}
+              className="inline-flex min-h-10 items-center gap-1 font-medium text-brand-600 hover:underline"
+            >
+              {task.link.label} <span aria-hidden="true">↗</span>
+            </button>
+            {showLinkNote && (
+              <p className="mt-2 rounded-lg bg-slate-50 p-3 text-slate-600" role="status">
+                Demo prototype: the company tools aren't connected. In production this opens{' '}
+                <span className="break-all font-medium text-slate-800">{task.link.url}</span> in a new tab.
+              </p>
+            )}
+          </div>
         )}
 
         <section className="rounded-lg border border-slate-200 p-3">
@@ -92,7 +102,7 @@ export default function TaskDetailModal({ employeeId, taskId, onClose, canToggle
           <p className="text-slate-600">{task.helpContact.role}</p>
           <a
             href={`mailto:${task.helpContact.email}?subject=${encodeURIComponent(`Question: ${task.title}`)}`}
-            className="text-brand-600 hover:underline"
+            className="inline-flex min-h-10 items-center text-brand-600 hover:underline"
           >
             {task.helpContact.email}
           </a>
