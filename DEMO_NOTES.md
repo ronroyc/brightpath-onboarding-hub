@@ -49,6 +49,7 @@ Small decisions I made where the brief was open:
 - "On track" on the dashboard counts hires with no overdue tasks.
 - The new-hire card says "Their onboarding plan is ready" (gender-neutral).
 - Saved demo data is thrown away when the day changes, so the relative dates stay right.
+- Task links (HR portal, wiki and so on) are placeholders. Clicking one shows a short "demo prototype" note with the address it would open, so nothing leads to a dead page.
 - Only David appears as a manager on the sign-in screen. The other three managers exist so the data model is real, and a hire added under them is visible by signing in as that hire.
 
 ## What I deliberately cut, and why
